@@ -81,12 +81,12 @@ if __name__ == '__main__':
     steak_doneness.view_functions()
 
     simulation = steak_doneness.simulate()
-    simulation.input['thickness'] = float(input("Thickness (cm): "))
-    simulation.input['temperature'] = int(input("Temperature (°C): "))
-    simulation.input['frying time'] = int(input("Frying time (min): "))
+    simulation.input['thickness'] = float(input("Thickness (0.5-5)[cm]: "))
+    simulation.input['temperature'] = int(input("Temperature (50-80)[°C]: "))
+    simulation.input['frying time'] = int(input("Frying time (2-16)[min]: "))
     simulation.compute()
 
     print("Steak doneness: ", simulation.output['doneness'])
-    steak_doneness.doneness.view(simulation=simulation)
-    print(simulation.output)
+    steak_doneness.doneness.view(sim=simulation)
+
     input('Press ENTER to exit')
