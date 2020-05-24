@@ -33,14 +33,20 @@ class SteakDoneness(object):
             ctrl.Rule((self.thickness['thin'] | self.thickness['medium']) & self.temperature['low'] &
                       self.frying_time['short'], self.doneness['rare']),
 
-            ctrl.Rule(self.thickness['thick'] & self.temperature['low'] &
+            ctrl.Rule(self.thickness['thick'] & (self.temperature['low'] | self.temperature['medium']) &
                       (self.frying_time['short'] | self.frying_time['medium']), self.doneness['rare']),
 
-            ctrl.Rule(self.thickness['thin'] & self.temperature['medium'] &
+            ctrl.Rule(self.thickness['thin'] & (self.temperature['medium'] | self.temperature['high']) &
                       (self.frying_time['short'] | self.frying_time['medium']), self.doneness['medium rare']),
 
-            ctrl.Rule(self.thickness['medium'] & (self.temperature['low'] | self.temperature['medium']) &
+            ctrl.Rule((self.thickness['thin'] | self.thickness['medium']) & self.temperature['low'] &
                       self.frying_time['medium'], self.doneness['medium rare']),
+
+            ctrl.Rule(self.thickness['thick'] & self.temperature['high'] &
+                      self.frying_time['short'], self.doneness['medium rare']),
+
+            ctrl.Rule(self.thickness['medium'] & (self.temperature['medium'] | self.temperature['high']) &
+                      (self.frying_time['short'] | self.frying_time['medium']), self.doneness['medium rare']),
 
             ctrl.Rule(self.thickness['thick'] & self.temperature['low'] &
                       (self.frying_time['long'] | self.frying_time['very long']), self.doneness['medium rare']),
@@ -52,6 +58,9 @@ class SteakDoneness(object):
                       self.frying_time['long'], self.doneness['medium']),
 
             ctrl.Rule((self.thickness['medium'] | self.thickness['thick']) & self.temperature['medium'] &
+                      self.frying_time['long'], self.doneness['medium']),
+
+            ctrl.Rule((self.thickness['thin'] | self.thickness['medium']) & self.temperature['low'] &
                       self.frying_time['long'], self.doneness['medium']),
 
             ctrl.Rule(self.thickness['thin'] & self.temperature['high'] &
@@ -81,12 +90,10 @@ if __name__ == '__main__':
     steak_doneness.view_functions()
 
     simulation = steak_doneness.simulate()
-    simulation.input['thickness'] = float(input("Thickness (0.5-5)[cm]: "))
-    simulation.input['temperature'] = int(input("Temperature (50-80)[°C]: "))
-    simulation.input['frying time'] = int(input("Frying time (2-16)[min]: "))
+    simulation.input['thickness'] = float(input("Thickness (cm)[0.5-5]: "))
+    simulation.input['temperature'] = int(input("Temperature (°C)[50-80]: "))
+    simulation.input['frying time'] = int(input("Frying time (min)[2-16]: "))
     simulation.compute()
 
     print("Steak doneness: ", simulation.output['doneness'])
     steak_doneness.doneness.view(sim=simulation)
-
-    input('Press ENTER to exit')
